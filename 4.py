@@ -4,6 +4,7 @@ from scipy.stats import linregress
 
 # Set style
 plt.rcParams["font.family"] = "sans-serif"
+plt.rcParams["figure.figsize"] = (10, 4)
 
 # Data
 x = np.array([0.25, 0.286, 0.333, 0.4, 0.5])
@@ -18,12 +19,17 @@ x_conti = np.linspace(0.23, 0.57)
 y_conti = result.intercept + result.slope * x_conti
 
 # Plot
-plt.errorbar(x, y, yerr=y_error, xerr=x_error, fmt="o")
-plt.plot(x_conti, y_conti)
+figure, axs = plt.subplots(1, 2)
+axs[0].errorbar(x, y, yerr=y_error, xerr=x_error, fmt="o")
+axs[0].plot(x_conti, y_conti)
 
-plt.xlabel("1/a (cm^-1)")
-plt.ylabel("sin(theta)")
-plt.ylim(0, None)
+axs[0].set_xlabel("1/a (cm^-1)")
+axs[0].set_ylabel("sin(theta)")
+axs[0].set_ylim(0, None)
+
+axs[1].scatter(x, y - result.intercept - x * result.slope)
+axs[1].set_xlabel("1/a (cm^-1)")
+axs[1].set_ylabel("Residuals")
 
 # Show
 plt.savefig("4a.png")
