@@ -5,6 +5,9 @@ from sympy.plotting.plot_implicit import ImplicitSeries
 from sympy.plotting.plot import _matplotlib_list
 import math
 
+# Set style
+plt.rcParams["font.family"] = "sans-serif"
+
 # Define constants
 GRAVITY = 980.665
 FREQUENCY = 10

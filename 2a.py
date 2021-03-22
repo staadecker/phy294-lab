@@ -1,8 +1,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.stats import linregress
 
 # Set style
 plt.rcParams["font.family"] = "sans-serif"
+plt.rcParams["figure.figsize"] = (10, 5)
 
 # Data
 x = np.array([5, 10, 15, 20, 25])
@@ -11,12 +13,27 @@ y = np.array([4.32, 2.17, 1.41, 1.03, 0.85])
 x_error = np.ones(5) * 0.05
 y_error = np.array([0.08, 0.04, 0.04, 0.07, 0.03])
 
-# Plot
-plt.errorbar(x, y, yerr=y_error, xerr=x_error, fmt="o")
+fig, axs = plt.subplots(1, 2)
 
-plt.xlabel("Frequency (Hz)")
-plt.ylabel("Wavelength (cm)")
-plt.ylim(0, None)
+# Plot
+axs[0].errorbar(x, y, yerr=y_error, xerr=x_error, fmt="o")
+
+axs[0].set_xlabel("Frequency (Hz)")
+axs[0].set_ylabel("Wavelength (cm)")
+axs[0].set_ylim(0, None)
+
+period = 1 / x
+period_error = x_error / x ** 2
+axs[1].errorbar(period, y, yerr=y_error, xerr=period_error, fmt=".")
+axs[1].set_xlabel("Period (s)")
+# axs[1].set_ylabel("Wavelength (cm)")
+axs[1].set_ylim(0, None)
+
+# Linear regression
+result = linregress(period, y)
+x_conti = np.linspace(0.03, 0.22)
+y_conti = result.intercept + result.slope * x_conti
+axs[1].plot(x_conti, y_conti)
 
 # Show
 plt.savefig("2a.png")
